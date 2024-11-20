@@ -7,9 +7,15 @@
 
 -- COMMAND ----------
 
+-- MAGIC %python
+-- MAGIC username = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().apply('user').replace('@', '_').replace('.', '_')
+-- MAGIC username
+
+-- COMMAND ----------
+
 -- DBTITLE 1,Create a Temporary view on JSON file(s)
 CREATE OR REPLACE TEMPORARY VIEW ebikes_at_station_json_vw
-AS SELECT * FROM json.`/Volumes/mehdidatalake_catalog/demo_bootcamp/landing_volume/gbfs/ebikes_at_station/ebikes_at_station_20241020111711.json`
+AS SELECT * FROM json.`/Volumes/<USERNAME>/hol_schema/landing_volume/ebikes_at_station/<FILE_NAME>`
 
 -- COMMAND ----------
 
@@ -105,7 +111,7 @@ select * FROM ebikes_at_station_vw
 
 -- DBTITLE 1,Create Temp. View of one of the files
 CREATE OR REPLACE TEMPORARY VIEW ebikes_at_station_text_vw
-AS SELECT * FROM text.`/Volumes/mehdidatalake_catalog/demo_bootcamp/landing_volume/gbfs/ebikes_at_station/ebikes_at_station_20241020111711.json`
+AS SELECT * FROM text.`/Volumes/<USERNAME>/hol_schema/landing_volume/ebikes_at_station/<FILE_NAME>`
 
 -- COMMAND ----------
 
