@@ -1,13 +1,16 @@
 # Databricks notebook source
 import dlt
+# COMMAND ----------
 
+username = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().apply('user').replace('@', '_').replace('.', '_')
+username
 # COMMAND ----------
 
 # DBTITLE 1,Schema Extraction from JSON Data Using PySpark
 df_schema = (
     spark.read.format("json")
     .load(
-        "/Volumes/mehdidatalake_catalog/demo_bootcamp/landing_volume/gbfs/station_status/station_status_20241020111610.json"
+        f"/Volumes/{username}/hol_schema/landing_volume/ebikes_at_station/station_status_XXXXX.json"
     )
     .select("data.stations")
 )
@@ -27,7 +30,7 @@ def station_status_raw():
         spark.readStream.format("cloudFiles")
         .option("cloudFiles.format", "json")
         .load(
-            "/Volumes/mehdidatalake_catalog/demo_bootcamp/landing_volume/gbfs/station_status/"
+            f"/Volumes/{username}/hol_schema/landing_volume/ebikes_at_station/"
         )
         .withColumn("data", from_json(col("data"), schema))
         .withColumn("station", explode(col("data.stations")))
