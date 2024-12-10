@@ -29,7 +29,7 @@ CREATE STREAMING TABLE
 
 --USE CATALOG '${catalog}';
 --USE SCHEMA hol_schema;
-APPLY CHANGES INTO ebikes_at_station_silver
+APPLY CHANGES INTO LIVE.ebikes_at_station_silver
 FROM STREAM(LIVE.ebikes_at_station_VW)
 KEYS (rideable_id, last_updated)
 SEQUENCE BY last_updated
