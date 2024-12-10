@@ -1,10 +1,12 @@
 # Databricks notebook source
 import dlt
+# COMMAND ----------
 
+catalog = spark.conf.get("catalog")
 # COMMAND ----------
 
 # DBTITLE 1,Schema Extraction from JSON Data Using PySpark
-df_schema = spark.read.format("json").load("/Volumes/mehdidatalake_catalog/demo_bootcamp/landing_volume/gbfs/station_information/station_information_20241024004059_manual.json").select("data.stations")
+df_schema = spark.read.format("json").load(f"/Volumes/{catalog}/hol_schema/landing_volume/station_information/station_information_XXXXXX.json").select("data.stations")
 schema = df_schema.schema
 
 # COMMAND ----------
@@ -22,7 +24,7 @@ def station_information_bronze():
         .option("cloudFiles.format", "json")
         .option("inferSchema", "true")
         .load(
-            "/Volumes/mehdidatalake_catalog/demo_bootcamp/landing_volume/gbfs/station_information/"
+            f"/Volumes/{catalog}/hol_schema/landing_volume/station_information/"
         )
         .withColumn("data", from_json(col("data"), schema))
         .withColumn("station", explode(col("data.stations")))

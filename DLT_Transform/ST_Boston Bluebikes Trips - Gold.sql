@@ -10,12 +10,12 @@ SELECT
       timestamp_utc
   ) AS next_update_time
 FROM
-  mehdidatalake_catalog.edw_bluebiks_ebikes_silver.ebikes_at_station_silver
+  '${catalog}'.edw_bluebiks_ebikes_silver.ebikes_at_station_silver
 
 -- COMMAND ----------
 
-USE CATALOG mehdidatalake_catalog;
-USE SCHEMA edw_bluebikes_ebikes_gold;
+USE CATALOG '${catalog}';
+USE SCHEMA hol_schema;
 CREATE
 OR REFRESH STREAMING TABLE ebikes_trips_st cluster by (trip_start_time_local, pickup_station_id) AS
 select
@@ -61,10 +61,10 @@ select
   END AS maintenance_trip
 from
   Live.ebikes_trips_VW_1 tt
-  join mehdidatalake_catalog.edw_bluebiks_ebikes_silver.ebikes_at_station_silver AS bs on tt.rideable_id = bs.rideable_id
+  join '${catalog}'.hol_schema.ebikes_at_station_silver AS bs on tt.rideable_id = bs.rideable_id
   and tt.update_time = CAST(CAST(bs.last_updated AS BIGINT) AS TIMESTAMP)
   join STREAM(
-    mehdidatalake_catalog.edw_bluebiks_ebikes_silver.ebikes_at_station_silver
+    '${catalog}'.hol_schema.ebikes_at_station_silver
   ) bs2 on tt.rideable_id = bs2.rideable_id
   and tt.next_update_time = CAST(CAST(bs2.last_updated AS BIGINT) AS TIMESTAMP)
   and (

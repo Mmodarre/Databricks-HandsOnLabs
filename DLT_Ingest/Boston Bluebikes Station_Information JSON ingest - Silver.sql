@@ -14,15 +14,15 @@ FROM
 
 -- COMMAND ----------
 
-USE CATALOG mehdidatalake_catalog;
-USE SCHEMA edw_bluebiks_ebikes_silver;
+USE CATALOG '${catalog}';
+USE SCHEMA hol_schema;
 CREATE OR REFRESH STREAMING TABLE
   station_information_scd2_silver CLUSTER BY (station_id, `__END_AT`)
 
 -- COMMAND ----------
 
-USE CATALOG mehdidatalake_catalog;
-USE SCHEMA edw_bluebiks_ebikes_silver;
+USE CATALOG '${catalog}';
+USE SCHEMA hol_schema;
 APPLY CHANGES INTO station_information_scd2_silver
 FROM
   STREAM(LIVE.station_information_VW) KEYS (station_id) SEQUENCE BY last_updated STORED AS SCD TYPE 2 TRACK HISTORY ON *
@@ -31,8 +31,8 @@ EXCEPT
 
 -- COMMAND ----------
 
-USE CATALOG mehdidatalake_catalog;
-USE SCHEMA edw_bluebikes_ebikes_gold;
+USE CATALOG '${catalog}';
+USE SCHEMA hol_schema;
 CREATE MATERIALIZED VIEW
   station_information_latest_gold AS
 select

@@ -4,8 +4,8 @@
 
 -- COMMAND ----------
 
-USE CATALOG mehdidatalake_catalog;
-USE SCHEMA edw_bluebikes_ebikes_gold;
+USE CATALOG '${catalog}';
+USE SCHEMA hol_schema;
 CREATE
 OR REFRESH MATERIALIZED VIEW ebikes_trips_stations_mv cluster by (trip_start_time_local) AS
 SELECT

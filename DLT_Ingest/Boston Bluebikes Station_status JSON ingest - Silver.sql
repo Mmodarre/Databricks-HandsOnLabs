@@ -15,15 +15,14 @@ FROM
 
 -- COMMAND ----------
 
-USE CATALOG mehdidatalake_catalog;
-USE SCHEMA edw_bluebiks_ebikes_silver;
+USE CATALOG '${catalog}';
+USE SCHEMA hol_schema;
 CREATE STREAMING TABLE
   station_status_silver CLUSTER BY (station_id, last_updated)
 
 -- COMMAND ----------
-
-USE CATALOG mehdidatalake_catalog;
-USE SCHEMA edw_bluebiks_ebikes_silver;
+USE CATALOG '${catalog}';
+USE SCHEMA hol_schema;
 APPLY CHANGES INTO station_status_silver
 FROM
   STREAM(LIVE.station_status_VW) KEYS (station_id, last_updated) SEQUENCE BY last_updated STORED AS SCD TYPE 1

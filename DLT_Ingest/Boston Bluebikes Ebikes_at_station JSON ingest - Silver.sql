@@ -20,15 +20,15 @@ FROM
 
 -- COMMAND ----------
 
-USE CATALOG mehdidatalake_catalog;
-USE SCHEMA edw_bluebiks_ebikes_silver;
+USE CATALOG '${catalog}';
+USE SCHEMA hol_schema;
 CREATE STREAMING TABLE
   ebikes_at_station_silver CLUSTER BY (rideable_id, last_updated)
 
 -- COMMAND ----------
 
-USE CATALOG mehdidatalake_catalog;
-USE SCHEMA edw_bluebiks_ebikes_silver;
+USE CATALOG '${catalog}';
+USE SCHEMA hol_schema;
 APPLY CHANGES INTO ebikes_at_station_silver
 FROM STREAM(LIVE.ebikes_at_station_VW)
 KEYS (rideable_id, last_updated)

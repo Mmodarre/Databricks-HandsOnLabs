@@ -2,15 +2,15 @@
 import dlt
 # COMMAND ----------
 
-username = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().apply('user').replace('@', '_').replace('.', '_')
-username
+catalog = spark.conf.get("catalog")
+
 # COMMAND ----------
 
 # DBTITLE 1,Schema Extraction from JSON Data Using PySpark
 df_schema = (
     spark.read.format("json")
     .load(
-        f"/Volumes/{username}/hol_schema/landing_volume/ebikes_at_station/station_status_XXXXX.json"
+        f"/Volumes/{catalog}/hol_schema/landing_volume/ebikes_at_station/ebikes_at_station_<XXXXXX>.json"
     )
     .select("data.stations")
 )
@@ -30,7 +30,7 @@ def station_status_raw():
         spark.readStream.format("cloudFiles")
         .option("cloudFiles.format", "json")
         .load(
-            f"/Volumes/{username}/hol_schema/landing_volume/ebikes_at_station/"
+            f"/Volumes/{catalog}/hol_schema/landing_volume/ebikes_at_station/"
         )
         .withColumn("data", from_json(col("data"), schema))
         .withColumn("station", explode(col("data.stations")))
